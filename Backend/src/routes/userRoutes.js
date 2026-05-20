@@ -5,7 +5,7 @@ import express from "express";
 
 const router = express.Router();
 
-router.post("/register", authMiddleware, adminMiddleware, registerUser);
+router.post("/register", registerUser);
 router.get("/user", authMiddleware, adminMiddleware, listUsers);
 router.get("/user/:id", authMiddleware, userById);
 router.put("/user/:id", authMiddleware, UpUser);

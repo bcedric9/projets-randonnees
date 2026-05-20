@@ -8,30 +8,64 @@ dotenv.config();
 const JWT_SECRET = process.env.DB_JWT_SECRET;
 
 export async function loginUser(req, res) {
+
     try {
-        const mail = req.body.mail;
-        const password = req.body.password || req.body.HashedPassword;
+
+        const { mail, password } = req.body;
 
         if (!mail || !password) {
-            return res.status(400).json({ message: "Email et mot de passe requis" });
+            return res.status(400).json({
+                message: "Email et mot de passe requis"
+            });
         }
 
         const user = await getUserByEmail(mail);
-        if (!user.length === 0) {
-        return res.status(404).json({ message: "email ou mot de passe incorrect" });
+
+        if (user.length === 0) {
+            return res.status(404).json({
+                message: "Email ou mot de passe incorrect"
+            });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
+        const foundUser = user[0];
+
+        const isMatch = await bcrypt.compare(
+            password,
+            foundUser.password
+        );
+
         if (!isMatch) {
-            return res.status(401).json({ message: "Mot de passe incorrect" });
+            return res.status(401).json({
+                message: "Mot de passe incorrect"
+            });
         }
 
-        const token = jwt.sign({ id: user.user_id }, JWT_SECRET, { expiresIn: "1h" });
-        res.status(200).json({ message: "Connexion réussie", token });
+        const token = jwt.sign(
+            {
+                user_id: foundUser.user_id,
+                role: foundUser.role
+            },
+            JWT_SECRET,
+            {
+                expiresIn: "1h"
+            }
+        );
+
+        res.status(200).json({
+            message: "Connexion réussie",
+            token
+        });
+
     } catch (error) {
-        console.error("Error logging in user:", error);
-        res.status(500).json({ message: "Erreur lors de la connexion de l'utilisateur" });
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Erreur lors de la connexion"
+        });
+
     }
+
 };
 
 export async function logoutUser(req, res) {

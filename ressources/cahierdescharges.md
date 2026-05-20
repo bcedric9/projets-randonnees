@@ -107,7 +107,8 @@ Le client, une fois connecté, pourra accèder aux réservations et pourra aussi
 );
 
 **Guide** = (  
-    guide_id INT PK,  
+    guide_id INT PK, 
+    image VARCHAR(255),
     last_name VARCHAR(255),  
     first_name VARCHAR(255),  
     bio TEXT,  
@@ -178,7 +179,7 @@ Le client, une fois connecté, pourra accèder aux réservations et pourra aussi
 
 ## 8. **Livrables & Tests**
 - **Livrables** : Code source, documentation technique, manuel utilisateur.
-- **Tests** : Unitaires (Jest), Fonctionnels (Cypress), Recette utilisateur.
+- **Tests** : Postman.
 
 ---
 

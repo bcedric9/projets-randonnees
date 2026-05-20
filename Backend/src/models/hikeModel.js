@@ -1,8 +1,8 @@
 import {connection} from "../config/db.js";
 
-export async function createHike(image, title, description, duration, level, max_participants, price, location, is_active) {
-    const create = 'INSERT INTO hike (image, title, description, duration, level, max_participants, price, location, is_active) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    const [result] = await connection.query(create, [image, title, description, duration, level, max_participants, price, location, is_active]);
+export async function createHike(image, title, description, duration, level, max_participants, price, location) {
+    const create = 'INSERT INTO hike (image, title, description, duration, level, max_participants, price, location) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const [result] = await connection.query(create, [image, title, description, duration, level, max_participants, price, location]);
     return result;
 }
 
@@ -18,9 +18,9 @@ export async function getHikeById(id) {
     return result[0];
 }
 
-export async function updateHike(id, image, title, description, duration, level, max_participants, price, location, is_active) {
-    const update = 'UPDATE hike SET image = ?, title = ?, description = ?, duration = ?, level = ?, max_participants = ?, price = ?, location = ?, is_active = ? WHERE hike_id = ?';
-    const [result] = await connection.query(update, [image, title, description, duration, level, max_participants, price, location, is_active, id]);
+export async function updateHike(id, image, title, description, duration, level, max_participants, price, location) {
+    const update = 'UPDATE hike SET image = ?, title = ?, description = ?, duration = ?, level = ?, max_participants = ?, price = ?, location = ? WHERE hike_id = ?';
+    const [result] = await connection.query(update, [image, title, description, duration, level, max_participants, price, location, id]);
     return result;
 }
 

@@ -1,9 +1,7 @@
-import jtw from "jsonwebtoken";
 import dotenv from "dotenv";
 
 
 dotenv.config();
-const JWT_SECRET = process.env.DB_JWT_SECRET;
 
 export default function adminMiddleware(req, res, next) {
     if (!req.user)
