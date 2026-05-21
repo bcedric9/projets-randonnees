@@ -95,7 +95,8 @@ export async function UpUser(req, res) {
 export async function softDelUser(req, res) {
     try {
         const { id } = req.params;
-        const user = await softDeleteUser(id);
+        const { is_active } = req.body;
+        const user = await softDeleteUser(id, is_active);
         res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
     } catch (error) {
         console.error("Error updating user:", error);

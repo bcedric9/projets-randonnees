@@ -7,6 +7,7 @@ import guideRoutes from "./routes/guideRoutes.js";
 import guideAvailabilityRoutes from "./routes/guideAvailabilityRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/guide", guideRoutes);
 app.use("/guide-availability", guideAvailabilityRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/review", reviewRoutes);
+app.use("/payment", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.send("API running");
