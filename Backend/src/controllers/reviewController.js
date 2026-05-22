@@ -171,7 +171,7 @@ export async function UpReview(req, res) {
         }
 
         const updatedReview = await updateReview(review_id, commentary, rating);
-        res.status(200).json(updatedReview);
+        res.status(200).json({message: "Avis mis à jour avec succès" });
     } catch (error) {
         res.status(500).json({ error: "erreur lors de la mise à jour de l'avis" });
     }

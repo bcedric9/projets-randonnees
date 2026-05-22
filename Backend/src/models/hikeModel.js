@@ -7,13 +7,13 @@ export async function createHike(image, title, description, duration, level, max
 }
 
 export async function getAllHikes() {
-    const select = 'SELECT * FROM hike';
+    const select = 'SELECT hike_id, image, title, description, duration, level, max_participants, price, location, is_active FROM hike';
     const [result] = await connection.query(select);
     return result;
 }
 
 export async function getHikeById(id) {
-    const select = 'SELECT * FROM hike WHERE hike_id = ?';
+    const select = 'SELECT hike_id, image, title, description, duration, level, max_participants, price, location, is_active FROM hike WHERE hike_id = ?';
     const [result] = await connection.query(select, [id]);
     return result[0];
 }

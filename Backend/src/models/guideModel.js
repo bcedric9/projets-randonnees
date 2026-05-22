@@ -7,13 +7,13 @@ export async function createGuide(last_name, first_name, bio, image) {
 };
 
 export async function getAllGuides() {
-    const select = 'SELECT * FROM guide';
+    const select = 'SELECT guide_id, last_name, first_name, bio, is_active, image FROM guide';
     const [result] = await connection.query(select);
     return result;
 };
 
 export async function getGuideById(id) {
-    const select = 'SELECT * FROM guide WHERE guide_id = ?';
+    const select = 'SELECT guide_id, last_name, first_name, bio, is_active, image FROM guide WHERE guide_id = ?';
     const [result] = await connection.query(select, [id]);
     return result[0];
 };

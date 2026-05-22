@@ -7,31 +7,31 @@ export async function createBooking(booking_date, number_participants, guide_id,
 };
 
 export async function getAllBookings() {
-    const select = 'SELECT * FROM booking ORDER BY booking_date DESC';
+    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking ORDER BY booking_date DESC';
     const [result] = await connection.query(select);
     return result;
 };
 
 export async function getBookingById(id) {
-    const select = 'SELECT * FROM booking WHERE booking_id = ?';
+    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE booking_id = ?';
     const [result] = await connection.query(select, [id]);
     return result[0];
 };
 
 export async function getBookingsByGuide(guide_id) {
-    const select = 'SELECT * FROM booking WHERE guide_id = ? ORDER BY booking_date DESC';
+    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE guide_id = ? ORDER BY booking_date DESC';
     const [result] = await connection.query(select, [guide_id]);
     return result;
 };
 
 export async function getBookingByDate(booking_date) {
-    const select = 'SELECT * FROM booking WHERE booking_date = ? ORDER BY booking_date DESC';
+    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE booking_date = ? ORDER BY booking_date DESC';
     const [result] = await connection.query(select, [booking_date]);
     return result;
 };
 
 export async function getBookingsByUser(user_id) {
-    const select = 'SELECT * FROM booking WHERE user_id = ? ORDER BY booking_date DESC';
+    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE user_id = ? ORDER BY booking_date DESC';
     const [result] = await connection.query(select, [user_id]);
     return result;
 };

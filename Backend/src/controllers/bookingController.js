@@ -98,7 +98,22 @@ export async function UpBooking(req, res) {
         };
 
         const { booking_date, number_participants, status, guide_id, hike_id } = req.body;
-        await updateBooking(id, booking_date, number_participants, status, guide_id, hike_id);
+
+        if (
+            req.user.role !== "admin" &&
+            status !== undefined
+        ) {
+            return res.status(403).json({
+                message: "Vous ne pouvez pas modifier le statut"
+            });
+        }
+
+        const updatedStatus =
+            req.user.role === "admin"
+                ? status
+                : booking.status;
+
+        await updateBooking(id, booking_date, number_participants, updatedStatus, guide_id, hike_id);
         res.status(200).json({ message: "Réservation mise à jour avec succès" });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la mise à jour de la réservation", error: error.message });

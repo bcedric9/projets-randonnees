@@ -10,6 +10,6 @@ router.get("/user", authMiddleware, adminMiddleware, listUsers);
 router.get("/user/:id", authMiddleware, userById);
 router.put("/user/:id", authMiddleware, UpUser);
 router.patch("/user/:id/soft-delete", authMiddleware, adminMiddleware, softDelUser);
-router.delete("/user/:id", authMiddleware, adminMiddleware, hardDelUser);
+router.delete("/user/:id", authMiddleware, hardDelUser);
 
 export default router;

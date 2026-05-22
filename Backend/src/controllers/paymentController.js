@@ -104,22 +104,16 @@ export async function upPayment(req, res) {
             return res.status(404).json({ error: "paiement non trouvé" });
         }
 
-        const { amount, payment_method, status } = req.body;
-
-        if (req.user.role !== "admin" && status !== undefined) {
-            return res.status(403).json({
-                error: "vous ne pouvez pas modifier le statut"
-            });
-        }
-
         if (
             payment.user_id !== req.user.user_id &&
             req.user.role !== "admin"
         ) {
             return res.status(403).json({ error: "vous n'êtes pas autorisé à modifier ce paiement" });
         }
+
+        const { amount, payment_method } = req.body;
         
-        await updatePayment(payment_id, amount, payment_method, status);
+        await updatePayment(payment_id, amount, payment_method);
 
         res.status(200).json({ message: "paiement mis à jour avec succès" });
     }

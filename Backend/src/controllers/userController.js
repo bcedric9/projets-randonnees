@@ -106,11 +106,31 @@ export async function softDelUser(req, res) {
 
 export async function hardDelUser(req, res) {
     try {
+
         const { id } = req.params;
-        const user = await hardDeleteUser(id);
-        res.status(200).json({ message: "Utilisateur supprimé avec succès" });
+
+        if (
+            req.user.user_id != id &&
+            req.user.role !== "admin"
+        ) {
+            return res.status(403).json({
+                message: "Accès refusé"
+            });
+        }
+
+        await hardDeleteUser(id);
+
+        res.status(200).json({
+            message: "Utilisateur supprimé avec succès"
+        });
+
     } catch (error) {
+
         console.error("Error deleting user:", error);
-        res.status(500).json({ message: "Erreur lors de la suppression de l'utilisateur" });
+
+        res.status(500).json({
+            message: "Erreur lors de la suppression de l'utilisateur"
+        });
+
     }
 };

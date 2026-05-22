@@ -10,14 +10,14 @@ export async function createReview(commentary, rating, hike_id, user_id) {
 
 export async function getAllReviews() {
   const [result] = await connection.execute(
-    "SELECT * FROM review ORDER BY created_at DESC"
+    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review ORDER BY created_at DESC"
   );
   return result;
 };
 
 export async function getReviewById(review_id) {
   const [result] = await connection.execute(
-    "SELECT * FROM review WHERE review_id = ?",
+    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review WHERE review_id = ?",
     [review_id]
   );
   return result[0];
@@ -25,7 +25,7 @@ export async function getReviewById(review_id) {
 
 export async function getReviewsByHike(hike_id) {
   const [result] = await connection.execute(
-    "SELECT * FROM review WHERE hike_id = ? ORDER BY created_at DESC",
+    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review WHERE hike_id = ? ORDER BY created_at DESC",
     [hike_id]
   );
   return result;
@@ -33,7 +33,7 @@ export async function getReviewsByHike(hike_id) {
 
 export async function getReviewsByUser(user_id) {
   const [result] = await connection.execute(
-    "SELECT * FROM review WHERE user_id = ? ORDER BY created_at DESC",
+    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review WHERE user_id = ? ORDER BY created_at DESC",
     [user_id]
   );
   return result;
@@ -41,7 +41,7 @@ export async function getReviewsByUser(user_id) {
 
 export async function getReviewsByUserAndHike(user_id, hike_id) {
   const [result] = await connection.execute(
-    "SELECT * FROM review WHERE user_id = ? AND hike_id = ?",
+    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review WHERE user_id = ? AND hike_id = ?",
     [user_id, hike_id]
   );
   return result;
