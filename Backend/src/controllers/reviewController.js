@@ -43,8 +43,6 @@ export async function createReviewController(req, res) {
 
   } catch (error) {
 
-    console.error(error);
-
     res.status(500).json({
       error: "Erreur lors de la création de l'avis"
     });

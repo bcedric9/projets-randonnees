@@ -24,8 +24,7 @@ export async function registerUser(req, res) {
         const user = await createUser(last_name, first_name, tel, mail, hashedPassword, registration_date);
         res.status(201).json({ message: "Utilisateur créé avec succès", user });
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Erreur lors de la création de l'utilisateur" });
     }
 };
 
@@ -34,7 +33,6 @@ export async function listUsers(req, res) {
         const users = await getAllUsers();
         res.status(200).json(users);
     } catch (error) {
-        console.error("Error fetching users:", error);
         res.status(500).json({ message: "Erreur lors de la récupération des utilisateurs" });
     }
 };
@@ -59,7 +57,6 @@ export async function userById(req, res) {
         }
         res.status(200).json(user);
     } catch (error) {
-        console.error("Error fetching user:", error);
         res.status(500).json({ message: "Erreur lors de la récupération de l'utilisateur" });
     }
 };
@@ -87,7 +84,6 @@ export async function UpUser(req, res) {
         const user = await updateUser(id, last_name, first_name, tel, mail, hashedPassword);
         res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
     } catch (error) {
-        console.error("Error updating user:", error);
         res.status(500).json({ message: "Erreur lors de la mise à jour de l'utilisateur" });
     }
 };
@@ -99,7 +95,6 @@ export async function softDelUser(req, res) {
         const user = await softDeleteUser(id, is_active);
         res.status(200).json({ message: "Utilisateur mis à jour avec succès" });
     } catch (error) {
-        console.error("Error updating user:", error);
         res.status(500).json({ message: "Erreur lors de la mise à jour de l'utilisateur" });
     }
 };
@@ -125,8 +120,6 @@ export async function hardDelUser(req, res) {
         });
 
     } catch (error) {
-
-        console.error("Error deleting user:", error);
 
         res.status(500).json({
             message: "Erreur lors de la suppression de l'utilisateur"
