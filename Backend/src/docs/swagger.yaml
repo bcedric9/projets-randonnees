@@ -1,0 +1,227 @@
+
+openapi: 3.0.0
+
+info:
+  title: API Randonnées
+  version: 1.0.0
+  description: API de gestion des randonnées, réservations et paiements
+
+paths:
+
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Inscription d'un utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstname:
+                  type: string
+                lastname:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        201:
+          description: Utilisateur créé
+
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Connexion utilisateur
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: Connexion réussie
+
+  /user/user:
+   get:
+    tags:
+      - User
+    summary: Récupérer tous les utilisateurs
+    responses:
+      200:
+        description: Liste des utilisateurs
+
+  /user/user/{id}:
+    get:
+      tags:
+        - User
+      summary: Récupérer un utilisateur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Utilisateur trouvé
+
+    put:
+      tags:
+        - User
+      summary: Modifier un utilisateur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Utilisateur mis à jour
+
+    delete:
+      tags:
+        - User
+      summary: Supprimer un utilisateur
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Utilisateur supprimé
+
+  /booking/booking:
+    post:
+      tags:
+        - Booking
+      summary: Créer une réservation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                booking_date:
+                  type: string
+                  format: date
+                number_participants:
+                  type: integer
+                guide_id:
+                  type: integer
+                hike_id:
+                  type: integer
+      responses:
+        201:
+          description: Réservation créée
+
+  /booking/booking/{id}:
+    get:
+      tags:
+        - Booking
+      summary: Récupérer une réservation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Réservation trouvée
+
+    put:
+      tags:
+        - Booking
+      summary: Modifier une réservation
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Réservation mise à jour
+
+  /payment/payment:
+    post:
+      tags:
+        - Payment
+      summary: Créer un paiement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+                payment_method:
+                  type: string
+                  example: card
+                booking_id:
+                  type: integer
+      responses:
+        201:
+          description: Paiement créé
+
+  /payment/payment/{id}:
+    get:
+      tags:
+        - Payment
+      summary: Récupérer un paiement
+      parameters:
+        - name: payment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Paiement trouvé
+
+  /payment/{payment_id}/confirm:
+    put:
+      tags:
+        - Payment
+      summary: Confirmer un paiement
+      parameters:
+        - name: payment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Paiement confirmé
+
+  /payment/{payment_id}/cancel:
+    put:
+      tags:
+        - Payment
+      summary: Annuler un paiement
+      parameters:
+        - name: payment_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Paiement annulé
