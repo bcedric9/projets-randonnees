@@ -152,6 +152,11 @@ export function getBookingsByUser(user_id) {
 
 export function getBookingsByDate(booking_date) {
     return api.get(`/booking/booking/date/${booking_date}`);
+
+}
+
+export function getBookingDetails(booking_id) {
+    return api.get(`/booking/booking/details/${booking_id}`);
 }
 
 export function updateBooking(id, data) {

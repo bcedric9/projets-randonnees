@@ -7,6 +7,8 @@ import Guides from '../pages/Guides';
 import Booking from '../pages/Booking';
 import Reviews from '../pages/Reviews';
 import Dashboard from '../pages/Dashboard';
+import Payment from '../pages/Payment';
+import Profile from '../pages/Profile';
 
 
 function AppRouter() {
@@ -20,6 +22,8 @@ function AppRouter() {
             <Route path="/booking" element={<Booking />} />
             <Route path="/reviews" element={<Reviews />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/payment" element={<Payment />} />
+            <Route path="/profile" element={<Profile />} />
         </Routes>
     );
 }
