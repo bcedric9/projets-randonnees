@@ -1,4 +1,4 @@
-import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking } from "../models/bookingModel.js";
+import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails } from "../models/bookingModel.js";
 
 export async function createBookingController(req, res) {
     try {
@@ -55,6 +55,27 @@ export async function bookingsByGuide(req, res) {
         res.status(200).json(bookings);
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération des réservations", error: error.message });
+    }
+};
+
+export async function bookingDetails(req, res) {
+    try {
+        const { booking_id } = req.params;
+
+        const details = await getBookingDetails(booking_id);
+
+        if (!details) {
+            return res.status(404).json({
+                message: "Réservation non trouvée"
+            });
+        }
+
+        res.status(200).json(details);
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur serveur"
+        });
     }
 };
 

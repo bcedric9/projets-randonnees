@@ -1,4 +1,4 @@
-import {connection} from "../config/db.js";
+import { connection } from "../config/db.js";
 
 export async function createBooking(booking_date, number_participants, guide_id, hike_id, user_id) {
     const create = 'INSERT INTO booking (booking_date, number_participants, guide_id, hike_id, user_id) VALUES (?, ?, ?, ?, ?)';
@@ -28,6 +28,13 @@ export async function getBookingByDate(booking_date) {
     const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE booking_date = ? ORDER BY booking_date DESC';
     const [result] = await connection.query(select, [booking_date]);
     return result;
+};
+
+export async function getBookingDetails(booking_id) {
+    const select = `SELECT booking.booking_id, booking.number_participants, hike.price, (booking.number_participants * hike.price) AS total
+         FROM booking JOIN hike ON booking.hike_id = hike.hike_id WHERE booking.booking_id = ?`;
+    const [result] = await connection.query(select, [booking_id]);
+    return result[0];
 };
 
 export async function getBookingsByUser(user_id) {
