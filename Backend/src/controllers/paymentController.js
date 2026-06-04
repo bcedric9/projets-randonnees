@@ -1,4 +1,4 @@
-import { createPayment, getAllPayments, getPaymentById, getPaymentsByBooking, updatePayment, deletePayment, confirmPayment, cancelPayment } from "../models/paymentModel.js";
+import { createPayment, getAllPayments, getPaymentById, getPaymentsByBooking, updatePayment, deletePayment, confirmPayment, cancelPayment, deletePaymentsByBooking } from "../models/paymentModel.js";
 import { getBookingById } from "../models/bookingModel.js";
 
 export async function createPaymentController(req, res) {
@@ -175,5 +175,22 @@ export async function cancelPaymentController(req, res) {
         res.status(200).json({ message: "paiement annulé avec succès" });
     } catch (error) {
         res.status(500).json({ error: "erreur lors de l'annulation du paiement" });
+    }
+};
+
+export async function deletePaymentsByBookingController(req, res) {
+    try {
+        const { booking_id } = req.params;
+        const payments = await getPaymentsByBooking(booking_id);
+
+        if (payments.length === 0) {
+            return res.status(404).json({
+                error: "aucun paiement trouvé pour cette réservation"
+            });
+        }
+        await deletePaymentsByBooking(booking_id);
+        res.status(200).json({ message: "paiements liés à la réservation supprimés avec succès" });
+    } catch (error) {
+        res.status(500).json({ error: "erreur lors de la suppression des paiements liés à la réservation" });
     }
 };

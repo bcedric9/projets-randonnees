@@ -53,7 +53,13 @@ export async function loginUser(req, res) {
 
         res.status(200).json({
             message: "Connexion réussie",
-            token
+            token,
+            user: {
+                user_id: foundUser.user_id,
+                first_name: foundUser.first_name,
+                last_name: foundUser.last_name,
+                mail: foundUser.mail
+            }
         });
 
     } catch (error) {

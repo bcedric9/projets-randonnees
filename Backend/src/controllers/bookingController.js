@@ -1,4 +1,5 @@
-import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails } from "../models/bookingModel.js";
+import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails, cancelBooking } from "../models/bookingModel.js";
+import { deletePaymentsByBooking } from "../models/paymentModel.js";
 
 export async function createBookingController(req, res) {
     try {
@@ -130,11 +131,18 @@ export async function UpBooking(req, res) {
         }
 
         const updatedStatus =
-            req.user.role === "admin"
+            req.user.role === "admin" && status !== undefined
                 ? status
                 : booking.status;
 
-        await updateBooking(id, booking_date, number_participants, updatedStatus, guide_id, hike_id);
+        await updateBooking(
+            id,
+            booking_date ?? booking.booking_date,
+            number_participants ?? booking.number_participants,
+            updatedStatus,
+            guide_id ?? booking.guide_id,
+            hike_id ?? booking.hike_id
+        );
         res.status(200).json({ message: "Réservation mise à jour avec succès" });
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la mise à jour de la réservation", error: error.message });
@@ -163,6 +171,7 @@ export async function delBooking(req, res) {
             });
         }
 
+        await deletePaymentsByBooking(id);
         await deleteBooking(id);
 
         res.status(200).json({
@@ -189,3 +198,37 @@ export async function bookingsByDate(req, res) {
     }
 };
 
+export async function cancelBookingController(req, res) {
+  try {
+    const { id } = req.params;
+
+    const booking = await getBookingById(id);
+
+    if (!booking) {
+      return res.status(404).json({
+        message: "Réservation non trouvée"
+      });
+    }
+
+    if (
+      req.user.user_id !== booking.user_id &&
+      req.user.role !== "admin"
+    ) {
+      return res.status(403).json({
+        message: "Accès refusé"
+      });
+    }
+
+    await cancelBooking(id);
+
+    res.status(200).json({
+      message: "Réservation annulée avec succès"
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de l'annulation",
+      error: error.message
+    });
+  }
+};

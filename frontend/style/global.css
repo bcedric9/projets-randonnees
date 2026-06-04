@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    padding: 1rem;
+    background-color:#2A6A83;
+    color: white;
+    font-family: Actor, 'regular';
+}
+
+.logo {
+    width: 80px;
+    height: auto;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+    font-family: "Faster One", cursive;
+    font-size: 3rem;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-btn {
+    color: white;
+    font-size: 1.2rem;
+    background-color: #714723;
+    border-radius: 10px;
+    padding: 10px, 20px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo {
+  width: 58px;
+  height: 58px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.brand span {
+  color: #fff;
+  font-family: 'Faster One', 'regular';
+  font-size: 34px;
+}

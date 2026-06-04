@@ -33,7 +33,7 @@ export async function getReviewsByHike(hike_id) {
 
 export async function getReviewsByUser(user_id) {
   const [result] = await connection.execute(
-    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review WHERE user_id = ? ORDER BY created_at DESC",
+    "SELECT review.review_id, review.commentary, review.rating, review.created_at, review.hike_id, review.user_id, hike.title AS hike_title FROM review JOIN hike ON review.hike_id = hike.hike_id WHERE review.user_id = ? ORDER BY review.created_at DESC",
     [user_id]
   );
   return result;

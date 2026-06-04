@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../contexte/AuthContext.js";
 
 function Login() {
   const navigate = useNavigate();
@@ -9,6 +10,8 @@ function Login() {
     mail: "",
     password: ""
   });
+
+  const {setIsLogged} = useContext(AuthContext);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -28,6 +31,8 @@ function Login() {
       const response = await loginUser(formData);
 
       localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
+      setIsLogged(true);
 
       navigate("/hikes");
     } catch (error) {

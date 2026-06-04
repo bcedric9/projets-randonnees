@@ -167,6 +167,10 @@ export function deleteBooking(id) {
     return api.delete(`/booking/booking/${id}`);
 }
 
+export function cancelBooking(id) {
+  return api.patch(`/booking/booking/${id}/cancel`);
+}
+
 // Review
 
 export function createReview(data) {

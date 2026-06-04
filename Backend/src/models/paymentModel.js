@@ -62,3 +62,10 @@ export async function cancelPayment(payment_id) {
   );
   return result;
 };
+
+export async function deletePaymentsByBooking(booking_id) {
+  const sql = `DELETE FROM payment WHERE booking_id = ?`;
+
+  const [result] = await connection.query(sql, [booking_id]);
+  return result;
+}
