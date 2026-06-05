@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createReview, getAllHikes, getReviewsByHike, updateReview, deleteReview } from "../services/api";
+import Header from "../components/Header";
 
 function Reviews() {
 
@@ -110,7 +111,8 @@ function Reviews() {
     };
 
     return (
-        <main>
+        <div className="Page">
+      <Header />
             <h1>Laissez un avis</h1>
 
             {message && <p>{message}</p>}
@@ -210,7 +212,7 @@ function Reviews() {
                     </button>
                 </form>
             )}
-        </main>
+        </div>
     );
 }
 

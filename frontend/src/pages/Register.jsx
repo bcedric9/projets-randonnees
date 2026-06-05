@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/api";
+import Header from "../components/Header";
 
 function Register() {
   const navigate = useNavigate();
@@ -46,7 +47,8 @@ function Register() {
   };
 
   return (
-    <main>
+    <div className="Page">
+      <Header />
       <h1>Inscription</h1>
 
       {error && <p>{error}</p>}
@@ -102,7 +104,7 @@ function Register() {
 
         <button type="submit">Créer mon compte</button>
       </form>
-    </main>
+    </div>
   );
 }
 

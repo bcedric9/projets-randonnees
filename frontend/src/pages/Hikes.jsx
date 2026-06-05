@@ -1,6 +1,9 @@
 import {useEffect, useState} from 'react';
 import {getAllHikes} from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import HikeCard from '../components/HikeCard';
+import '/style/global.css';
 
 function Hikes() {
     useEffect(() => {
@@ -28,25 +31,23 @@ function Hikes() {
   };
 
   return (
-    <main>
-      <h1>Nos randonnées</h1>
+    <div className="Page">
+      <Header/>
+      <h2>Nos randonnées</h2>
 
-      {hikes.map((hike) => (
-        <article key={hike.hike_id}>
-          <h2>{hike.title}</h2>
-          <p>{hike.description}</p>
-          <p>Durée : {hike.duration} h</p>
-          <p>Niveau : {hike.level}</p>
-          <p>Lieu : {hike.location}</p>
-          <p>Prix : {hike.price} €</p>
-          <p>Participants max : {hike.max_participants}</p>
+      <p className='presentation'>La randonnée en montagne permet de se ressourcer en pleine nature tout en améliorant sa condition physique. 
+        Elle réduit le stress, favorise le bien-être mental et offre un véritable moment de déconnexion. 
+        C'est aussi une excellente façon de se reconnecter à soi et à l'environnement.</p>
 
-          <button onClick={() => handleBooking(hike.hike_id)}>
-            Réserver
-          </button>
-        </article>
-      ))}
-    </main>
+      <div className="cards-container">
+        {hikes.map((hike) => (
+          <HikeCard
+            key={hike.hike_id}
+            hike={hike}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 

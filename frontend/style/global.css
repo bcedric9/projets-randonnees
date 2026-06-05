@@ -1,9 +1,22 @@
 body {
     margin: 0;
-    padding: 1rem;
-    background-color:#2A6A83;
+    background-color: #2A6A83;
     color: white;
-    font-family: Actor, 'regular';
+    font-family: "Actor", 'regular';
+}
+
+.Page {
+    margin: 1%;
+    margin-right: 1%;
+}
+
+.Titre, h2 {
+    display: flex;
+    justify-content: center;
+    font-family: "Faster One", "regular";
+    font-weight: lighter;
+    font-size: 2.5rem;
+    letter-spacing: 2px;
 }
 
 .logo {
@@ -11,14 +24,20 @@ body {
     height: auto;
 }
 
+.header {
+    width: 100%;
+    height: 100%;
+}
+
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
     width: 100%;
-    padding: 0 20px;
+    padding: 0 35px;
+    padding-left: 30px;
     box-sizing: border-box;
+    margin-top: 1%;
 }
 
 .navbar-left {
@@ -26,7 +45,7 @@ nav {
     align-items: center;
     gap: 15px;
     margin: 0;
-    font-family: "Faster One", cursive;
+    font-family: "Faster One";
     font-size: 3rem;
 }
 
@@ -47,20 +66,100 @@ nav {
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
 .logo {
-  width: 58px;
-  height: 58px;
-  border-radius: 12px;
-  object-fit: cover;
+    width: 12%;
+    height: 12%;
+    border-radius: 50px;
+    object-fit: cover;
 }
 
-.brand span {
-  color: #fff;
-  font-family: 'Faster One', 'regular';
-  font-size: 34px;
+.title {
+    position: relative;
+    width: 100%;
+}
+
+.title img {
+    width: 100%;
+    display: block;
+}
+
+.mountain-title {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: black;
+    font-size: 4rem;
+    font-family: "Faster One";
+    font-weight: normal;
+    text-align: center;
+    border: 2px solid black;
+    padding: 40px;
+}
+
+.presentation {
+    font-family: "Actor", sans-serif;
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+
+}
+
+.suggestion {
+    background: #78961C;
+    margin: 1%;
+}
+
+.cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.hike-card {
+    width: 320px;
+    background: #714723;
+    border-radius: 15px;
+    overflow: hidden;
+    color: white;
+    display : flex;
+    flex-direction: column;
+}
+
+.hike-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.hike-content {
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.hike-content h3 {
+    margin-bottom: 10px;
+}
+
+.reserve-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 8px;
+    background: #78961C;
+    color: white;
+    cursor: pointer;
 }

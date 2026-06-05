@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { getAllGuides } from "../services/api";
+import Header from "../components/Header";
 
 function Guides() {
   const [guides, setGuides] = useState([]);
@@ -31,7 +32,8 @@ function Guides() {
   }
 
   return (
-    <main>
+    <div className="Page">
+      <Header />
       <h1>Nos guides</h1>
 
       {guides.length === 0 ? (
@@ -57,7 +59,7 @@ function Guides() {
           ))}
         </section>
       )}
-    </main>
+    </div>
   );
 }
 

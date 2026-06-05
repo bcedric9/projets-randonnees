@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react";
 import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexte/AuthContext.js";
+import Header from "../components/Header.jsx";
 
 function Login() {
   const navigate = useNavigate();
@@ -44,7 +45,8 @@ function Login() {
   };
 
   return (
-    <div>
+    <div className="Page">
+      <Header />
       <h1>Page de Connexion</h1>
 
       <form onSubmit={handleSubmit}>
