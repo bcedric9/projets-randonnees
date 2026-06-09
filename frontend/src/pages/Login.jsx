@@ -3,6 +3,7 @@ import { loginUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../contexte/AuthContext.js";
 import Header from "../components/Header.jsx";
+import Footer from "../components/Footer.jsx";
 
 function Login() {
   const navigate = useNavigate();
@@ -47,11 +48,11 @@ function Login() {
   return (
     <div className="Page">
       <Header />
-      <h1>Page de Connexion</h1>
+      <h2>Page de Connexion</h2>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
+      <form onSubmit={handleSubmit} className="login-form">
+        <div className="form-group">
+          <label>E-mail :</label>
           <input
             type="email"
             name="mail"
@@ -60,8 +61,8 @@ function Login() {
           />
         </div>
 
-        <div>
-          <label>Mot de passe:</label>
+        <div className="form-group">
+          <label>Mot de passe :</label>
           <input
             type="password"
             name="password"
@@ -72,6 +73,8 @@ function Login() {
 
         <button type="submit">Se connecter</button>
       </form>
+
+      <Footer />
     </div>
   );
 }

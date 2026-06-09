@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/api";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Register() {
   const navigate = useNavigate();
@@ -49,61 +50,80 @@ function Register() {
   return (
     <div className="Page">
       <Header />
-      <h1>Inscription</h1>
+      <h2>Inscription</h2>
 
       {error && <p>{error}</p>}
       {success && <p>{success}</p>}
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="last_name"
-          placeholder="Nom"
-          value={formData.last_name}
-          onChange={handleChange}
-          required
-        />
+      <form onSubmit={handleSubmit} className="register-form">
 
-        <input
-          type="text"
-          name="first_name"
-          placeholder="Prénom"
-          value={formData.first_name}
-          onChange={handleChange}
-          required
-        />
+        <div className="form-group">
+          <label htmlFor="lastname">Nom</label>
+          <input
+            type="text"
+            name="last_name"
+            placeholder="Nom"
+            value={formData.last_name}
+            onChange={handleChange}
+            required
+          />
+          
 
-        <input
-          type="tel"
-          name="tel"
-          placeholder="Téléphone"
-          value={formData.tel}
-          onChange={handleChange}
-          required
-          pattern="\d{10}"
-        />
+        
+          <label htmlFor="firstname">Prénom</label>
+          <input
+            type="text"
+            name="first_name"
+            placeholder="Prénom"
+            value={formData.first_name}
+            onChange={handleChange}
+            required
+          />
+         
 
-        <input
-          type="email"
-          name="mail"
-          placeholder="Email"
-          value={formData.mail}
-          onChange={handleChange}
-          required
-        />
+       
+          <label htmlFor="tel">Téléphone</label>
+          <input
+            type="tel"
+            name="tel"
+            placeholder="Téléphone"
+            value={formData.tel}
+            onChange={handleChange}
+            required
+            pattern="\d{10}"
+          />
+          
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Mot de passe"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          minLength={8}
-        />
+        
+          <label htmlFor="mail">E-mail</label>
+          <input
+            type="email"
+            name="mail"
+            placeholder="Email"
+            value={formData.mail}
+            onChange={handleChange}
+            required
+          />
+          
 
-        <button type="submit">Créer mon compte</button>
+
+          <label htmlFor="password">Mot de passe</label>
+          <input
+            type="password"
+            name="password"
+            placeholder="Mot de passe"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength={8}
+          />
+          
+
+          <button type="submit">Créer mon compte</button> 
+          </div>
+      
       </form>
+      <Footer />
     </div>
   );
 }

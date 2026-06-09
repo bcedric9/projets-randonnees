@@ -6,7 +6,7 @@ function HikeCard({ hike }) {
     return (
         <article className="hike-card">
             <img
-                src={hike.image}
+                src={`/images/hikes/${hike.image}`}
                 alt={hike.title}
                 className="hike-image"
             />
@@ -27,7 +27,7 @@ function HikeCard({ hike }) {
                 </p>
 
                 <p>
-                    <strong>Durée (minutes) :</strong> {hike.duration}
+                    <strong>Durée (heures) :</strong> {hike.duration}
                 </p>
 
                 <p>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { createReview, getAllHikes, getReviewsByHike, updateReview, deleteReview } from "../services/api";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Reviews() {
 
@@ -113,11 +114,11 @@ function Reviews() {
     return (
         <div className="Page">
       <Header />
-            <h1>Laissez un avis</h1>
+            <h2>Laissez un avis</h2>
 
             {message && <p>{message}</p>}
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="review-form">
                 <div>
                     <label>Randonnée</label>
                     <select
@@ -155,8 +156,10 @@ function Reviews() {
                     <label>Commentaire</label>
                     <textarea
                         name="commentary"
+                        rows="4"
                         value={formData.commentary}
                         onChange={handleChange}
+                        style={{ resize: 'none' }}
                         required
                     />
                 </div>
@@ -212,6 +215,7 @@ function Reviews() {
                     </button>
                 </form>
             )}
+            <Footer />
         </div>
     );
 }

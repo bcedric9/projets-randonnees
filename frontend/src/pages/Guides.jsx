@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { getAllGuides } from "../services/api";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
+import GuideCard from "../components/GuideCard";
 
 function Guides() {
+
+  useEffect(() => {
+  window.scrollTo(0,0);
+}, []);
+
   const [guides, setGuides] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -23,42 +29,28 @@ function Guides() {
     fetchGuides();
   }, []);
 
-  if (loading) {
-    return <p>Chargement des guides...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
     <div className="Page">
       <Header />
-      <h1>Nos guides</h1>
+      <h2>Nos guides</h2>
+
+      <p className='presentation'>Découvrez notre équipe de guides professionnels. Chacun possède sa propre expertise, 
+        des balades familiales aux treks les plus sportifs, pour vous faire vivre une expérience 
+        unique au cœur de la montagne.</p>
 
       {guides.length === 0 ? (
         <p>Aucun guide disponible.</p>
       ) : (
-        <section>
+        <div className="cards-container">
           {guides.map((guide) => (
-            <article key={guide.guide_id}>
-              {guide.image && (
-                <img
-                  src={`http://localhost:3000/uploads/guides/${guide.image}`}
-                  alt={`${guide.first_name} ${guide.last_name}`}
-                  width="200"
-                />
-              )}
-
-              <h2>
-               Nom : {guide.first_name} {guide.last_name}
-              </h2>
-
-              <p>Biographie :{guide.bio}</p>
-            </article>
+            <GuideCard
+              key={guide.guide_id}
+              guide={guide}
+            />
           ))}
-        </section>
+        </div>
       )}
+      <Footer />
     </div>
   );
 }

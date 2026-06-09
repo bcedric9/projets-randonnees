@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import HikeCard from '../components/HikeCard';
 import '/style/global.css';
+import Footer from '../components/Footer';
 
 function Hikes() {
     useEffect(() => {
@@ -47,6 +48,7 @@ function Hikes() {
           />
         ))}
       </div>
+      <Footer />
     </div>
   );
 }
