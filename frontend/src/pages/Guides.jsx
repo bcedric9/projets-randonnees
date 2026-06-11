@@ -21,8 +21,6 @@ function Guides() {
       } catch (error) {
         console.error(error);
         setError("Impossible de récupérer les guides");
-      } finally {
-        setLoading(false);
       }
     };
 

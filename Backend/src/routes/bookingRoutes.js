@@ -1,4 +1,4 @@
-import { createBookingController, listBookings, bookingById, bookingsByGuide, bookingsByDate, bookingsByUser, UpBooking, delBooking, bookingDetails, cancelBookingController } from "../controllers/bookingController.js";
+import { createBookingController, listBookings, bookingById, bookingsByGuide, bookingsByDate, bookingsByUser, UpBooking, delBooking, bookingDetails, cancelBookingController, updateBookingStatusController } from "../controllers/bookingController.js";
 import express from "express";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
@@ -15,4 +15,6 @@ router.put("/booking/:id", authMiddleware, UpBooking);
 router.delete("/booking/:id", authMiddleware, delBooking);
 router.get("/booking/details/:booking_id", authMiddleware, bookingDetails);
 router.patch("/booking/cancel/:id", authMiddleware, cancelBookingController);
+router.patch("/booking/:id/status", authMiddleware, adminMiddleware, updateBookingStatusController);
+
 export default router;

@@ -9,9 +9,21 @@ export async function createReview(commentary, rating, hike_id, user_id) {
 };
 
 export async function getAllReviews() {
-  const [result] = await connection.execute(
-    "SELECT review_id, commentary, rating, created_at, hike_id, user_id FROM review ORDER BY created_at DESC"
-  );
+  const [result] = await connection.execute(`
+    SELECT
+      review.review_id,
+      review.commentary,
+      review.rating,
+      review.created_at,
+      review.user_id,
+      hike.title AS hike_title,
+      user.first_name,
+      user.last_name
+    FROM review
+    JOIN hike ON review.hike_id = hike.hike_id
+    JOIN user ON review.user_id = user.user_id
+    ORDER BY review.created_at DESC`);
+
   return result;
 };
 

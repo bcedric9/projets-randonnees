@@ -58,7 +58,8 @@ export async function loginUser(req, res) {
                 user_id: foundUser.user_id,
                 first_name: foundUser.first_name,
                 last_name: foundUser.last_name,
-                mail: foundUser.mail
+                mail: foundUser.mail,
+                role: foundUser.role,
             }
         });
 

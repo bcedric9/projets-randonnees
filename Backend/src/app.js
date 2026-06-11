@@ -10,6 +10,7 @@ import reviewRoutes from "./routes/reviewRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
+import stripeRoutes from './routes/stripeRoutes.js'
 
 const app = express();
 
@@ -23,6 +24,7 @@ app.use("/guide-availability", guideAvailabilityRoutes);
 app.use("/booking", bookingRoutes);
 app.use("/review", reviewRoutes);
 app.use("/payment", paymentRoutes);
+app.use("/stripe", stripeRoutes);
 
 app.get("/", (req, res) => {
   res.send("API running");

@@ -1,4 +1,4 @@
-import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails, cancelBooking } from "../models/bookingModel.js";
+import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails, cancelBooking, updateBookingStatus } from "../models/bookingModel.js";
 import { deletePaymentsByBooking } from "../models/paymentModel.js";
 
 export async function createBookingController(req, res) {
@@ -232,3 +232,21 @@ export async function cancelBookingController(req, res) {
     });
   }
 };
+
+export async function updateBookingStatusController(req, res) {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    await updateBookingStatus(id, status);
+
+    res.status(200).json({
+      message: "Statut mis à jour"
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur statut",
+      error: error.message
+    });
+  }
+}

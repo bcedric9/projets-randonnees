@@ -15,8 +15,8 @@ function Booking() {
     const [hikes, setHikes] = useState([]);
     const [selectedHike, setSelectedHike] = useState(null);
     const guideId = searchParams.get("guide_id");
-
     const [guides, setGuides] = useState([]);
+
     const [formData, setFormData] = useState({
         hike_id: hikeId || "",
         guide_id: guideId || "",
@@ -25,10 +25,25 @@ function Booking() {
     });
 
     useEffect(() => {
-        getAllHikes()
-            .then((response) => setHikes(response.data))
-            .catch((error) => console.error(error));
-    }, []);
+        const fetchHikes = async () => {
+            try {
+                const response = await getAllHikes();
+                setHikes(response.data);
+
+                if (hikeId) {
+                    const foundHike = response.data.find(
+                        (hike) => Number(hike.hike_id) === Number(hikeId)
+                    );
+
+                    setSelectedHike(foundHike);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchHikes();
+    }, [hikeId]);
 
     useEffect(() => {
         getAllGuides()
@@ -64,24 +79,20 @@ function Booking() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const response = await createBooking({
-            booking_date: formData.booking_date,
-            number_participants: formData.number_participants,
-            guide_id: formData.guide_id,
-            hike_id: hikeId
-        });
+        try {
+            const response = await createBooking({
+                booking_date: formData.booking_date,
+                number_participants: formData.number_participants,
+                guide_id: formData.guide_id,
+                hike_id: formData.hike_id
+            });
 
-        if (
-            selectedHike &&
-            Number(formData.number_participants) > selectedHike.max_participants
-        ) {
-            alert(`Maximum ${selectedHike.max_participants} participants`);
-            return;
+            const bookingId = response.data.bookingId;
+
+            navigate(`/payment?booking_id=${bookingId}`);
+        } catch (error) {
+            console.error("Erreur réservation :", error.response?.data || error);
         }
-
-        const bookingId = response.data.bookingId;
-
-        navigate(`/payment?booking_id=${bookingId}`);
     };
 
     return (
@@ -119,9 +130,9 @@ function Booking() {
                         onChange={handleChange}
                         min={new Date().toISOString().split("T")[0]}
                     />
-                    </div>
+                </div>
 
-                    <div className="form-group">
+                <div className="form-group">
                     <label>Participants</label>
                     <input
                         type="number"

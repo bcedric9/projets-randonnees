@@ -97,24 +97,24 @@ function Profile() {
 
   return (
     <main>
-      <h1>Mon profil</h1>
-
-      <section>
-        <h2>Mes informations</h2>
-        <p>
-          Nom : {user.first_name} {user.last_name}
-        </p>
-        <p>Email : {user.mail}</p>
-      </section>
+      <h2>Mon profil</h2>
+      <div className="profil-container">
+        <section className="review-card">
+          <p>
+            Nom : {user.first_name} {user.last_name}
+          </p>
+          <p>Email : {user.mail}</p>
+        </section>
+      </div>
 
       <section>
         <h2>Mes réservations</h2>
-
+<div className="profil-container">
         {bookings.length === 0 ? (
           <p>Aucune réservation pour le moment.</p>
         ) : (
           bookings.map((booking) => (
-            <article key={booking.booking_id}>
+            <article key={booking.booking_id} className="profil-card">
               <p>Date : {new Date(booking.booking_date).toLocaleDateString("fr-FR")}</p>
               <p>Participants : {booking.number_participants}</p>
               <p>Statut : {booking.status}</p>
@@ -131,11 +131,12 @@ function Profile() {
             </article>
           ))
         )}
+        </div>
       </section>
 
       {editingBooking && (
-        <section>
-          <form onSubmit={handleUpdate}>
+        <section className="profil-container">
+          <form onSubmit={handleUpdate} className="profil-card">
             <h3>Modifier la réservation</h3>
 
             <div>
@@ -174,17 +175,18 @@ function Profile() {
               Annuler
             </button>
           </form>
+          
         </section>
       )}
 
       <section>
         <h2>Mes avis</h2>
-
+<div className="profil-container">
         {reviews.length === 0 ? (
           <p>Vous n'avez pas encore laissé d'avis.</p>
         ) : (
           reviews.map((review) => (
-            <article key={review.review_id}>
+            <article key={review.review_id} className="profil-card">
               <p>Note : {review.rating}/5</p>
               <p>Commentaire : {review.commentary}</p>
               <p>Date : {new Date(review.created_at).toLocaleDateString("fr-FR")}</p>
@@ -192,6 +194,7 @@ function Profile() {
             </article>
           ))
         )}
+        </div>
       </section>
     </main>
   );

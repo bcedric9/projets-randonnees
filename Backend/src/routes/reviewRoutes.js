@@ -6,7 +6,7 @@ import adminMiddleware from "../middlewares/adminMiddleware.js";
 const router = express.Router();
 
 router.post("/review", authMiddleware, createReviewController);
-router.get("/review", authMiddleware, adminMiddleware, listReviews);
+router.get("/review", listReviews);
 router.get("/review/hike/:hike_id", authMiddleware, reviewsByHike);
 router.get("/review/hike/:hike_id/average-rating", authMiddleware, averageRatingByHikeId);
 router.get("/review/user/:user_id", authMiddleware, reviewsByUser);

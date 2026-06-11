@@ -259,7 +259,9 @@ nav {
 
 /* FORMULAIRES */
 
-.reservation-form, .login-form, .review-form {
+.reservation-form,
+.login-form,
+.review-form {
     max-width: 900px;
     margin: 0 auto;
     display: grid;
@@ -272,6 +274,19 @@ nav {
     border: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 5%;
 }
+
+.payment-form{
+    max-width: 100%;
+    padding: 38px;
+    border-radius: 28px;
+    background: #78961C;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 30px; 
+}
+
 
 .register-form {
     max-width: 300px;
@@ -290,10 +305,11 @@ nav {
     justify-content: center;
 }
 
-.register-form .form-group, 
-.reservation-form .form-group, 
+.register-form .form-group,
+.reservation-form .form-group,
 .login-form .form-group,
-.review-form .form-group {
+.review-form .form-group,
+.payment-form .form-group {
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -303,7 +319,8 @@ nav {
 .reservation-form label,
 .register-form label,
 .login-form label,
-.review-form label {
+.review-form label,
+.profil-card label {
     display: block;
     margin-bottom: 8px;
     color: white;
@@ -318,9 +335,25 @@ nav {
 .login-form input,
 .review-form input,
 .review-form select,
-.review-form textarea {
+.review-form textarea,
+.profil-card input {
     width: 100%;
     height: 48px;
+    box-sizing: border-box;
+    padding: 0 14px;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #2A6A83;
+    color: white;
+    font-size: 15px;
+    font-family: 'Actor', 'regular';
+    outline: none;
+    cursor: pointer;
+}
+
+.payment-form select {
+    width: 100%;
+    height: 30px;
     box-sizing: border-box;
     padding: 0 14px;
     border-radius: 14px;
@@ -360,5 +393,54 @@ nav {
     cursor: pointer;
     background: #714723;
     color: white;
-    margin-top: 5%;
+    margin-top: 2%;
+}
+
+.review-card, .profil-card {
+    background: #714723;
+    border-radius: 20px;
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 600px;
+    margin: 2%;
+    padding: 20px 24px;
+}
+
+.reviews-container, .profil-container, .payment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profil-card button, .button-edit {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 14px;
+    margin-top: 2%;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #78961C;
+    color: white;
+    font-size: 15px;
+    font-family: 'Actor', 'regular';
+    outline: none;
+    cursor: pointer;
+}
+
+.payment-card button {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 0 14px;
+    margin-top: 2%;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: #714723;
+    color: white;
+    font-size: 15px;
+    font-family: 'Actor', 'regular';
+    outline: none;
+    cursor: pointer;
 }

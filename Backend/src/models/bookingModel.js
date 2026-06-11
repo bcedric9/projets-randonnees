@@ -7,7 +7,7 @@ export async function createBooking(booking_date, number_participants, guide_id,
 };
 
 export async function getAllBookings() {
-    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking ORDER BY booking_date DESC';
+    const select = 'SELECT booking.booking_id, booking.booking_date, booking.number_participants, booking.status, user.first_name AS user_first_name, user.last_name AS user_last_name, guide.first_name AS guide_first_name, guide.last_name AS guide_last_name, hike.title AS hike_title FROM booking JOIN user ON booking.user_id = user.user_id JOIN guide ON booking.guide_id = guide.guide_id JOIN hike ON booking.hike_id = hike.hike_id ORDER BY booking.booking_date DESC';
     const [result] = await connection.query(select);
     return result;
 };
@@ -19,13 +19,13 @@ export async function getBookingById(id) {
 };
 
 export async function getBookingsByGuide(guide_id) {
-    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE guide_id = ? ORDER BY booking_date DESC';
+    const select = 'SELECT booking.booking_id, booking.booking_date, booking.number_participants, booking.status, user.first_name AS user_first_name, user.last_name AS user_last_name, guide.first_name AS guide_first_name, guide.last_name AS guide_last_name, hike.title AS hike_title FROM booking JOIN user ON booking.user_id = user.user_id JOIN guide ON booking.guide_id = guide.guide_id JOIN hike ON booking.hike_id = hike.hike_id WHERE booking.guide_id = ? ORDER BY booking.booking_date DESC';
     const [result] = await connection.query(select, [guide_id]);
     return result;
 };
 
 export async function getBookingByDate(booking_date) {
-    const select = 'SELECT booking_id, booking_date, number_participants, status, guide_id, hike_id, user_id FROM booking WHERE booking_date = ? ORDER BY booking_date DESC';
+    const select = 'SELECT booking.booking_id, booking.booking_date, booking.number_participants, booking.status, user.first_name AS user_first_name, user.last_name AS user_last_name, guide.first_name AS guide_first_name, guide.last_name AS guide_last_name, hike.title AS hike_title FROM booking JOIN user ON booking.user_id = user.user_id JOIN guide ON booking.guide_id = guide.guide_id JOIN hike ON booking.hike_id = hike.hike_id WHERE booking.booking_date = ? ORDER BY booking.booking_date DESC';
     const [result] = await connection.query(select, [booking_date]);
     return result;
 };
@@ -69,3 +69,11 @@ export async function deleteBooking(id) {
     return result;
 };
 
+export async function updateBookingStatus(id, status) {
+  const [result] = await connection.query(
+    "UPDATE booking SET status = ? WHERE booking_id = ?",
+    [status, id]
+  );
+
+  return result;
+}

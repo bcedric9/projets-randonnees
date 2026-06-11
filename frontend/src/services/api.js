@@ -171,6 +171,10 @@ export function cancelBooking(id) {
   return api.patch(`/booking/booking/${id}/cancel`);
 }
 
+export function updateBookingStatus(id, data) {
+  return api.patch(`/booking/booking/${id}/status`, data);
+}
+
 // Review
 
 export function createReview(data) {
@@ -241,6 +245,10 @@ export function confirmPayment(payment_id) {
 
 export function cancelPayment(payment_id) {
     return api.put(`/payment/payment/${payment_id}/cancel`);
+}
+
+export function createStripeCheckout(data) {
+  return api.post("/stripe/create-checkout-session", data);
 }
 
 export default api;

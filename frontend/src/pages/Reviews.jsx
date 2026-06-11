@@ -1,16 +1,31 @@
 import { useState, useEffect } from "react";
-import { createReview, getAllHikes, getReviewsByHike, updateReview, deleteReview } from "../services/api";
+import { createReview, getAllHikes, getReviewsByHike, updateReview, deleteReview, getAllReviews } from "../services/api";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function Reviews() {
 
+    const user = JSON.parse(localStorage.getItem("user"));
+    const [reviews, setReviews] = useState([]);
     const [hikes, setHikes] = useState([]);
     const [formData, setFormData] = useState({
         commentary: "",
         rating: 5,
-        hike_title: ""
+        hike_id: ""
     });
+
+    const fetchAllReviews = async () => {
+        try {
+            const response = await getAllReviews();
+            setReviews(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllReviews();
+    }, []);
 
     const [editingReview, setEditingReview] = useState(null);
 
@@ -41,7 +56,7 @@ function Reviews() {
         try {
             await updateReview(editingReview.review_id, editForm);
 
-            await fetchReviews(formData.hike_id);
+            await fetchAllReviews();
 
             setEditingReview(null);
         } catch (error) {
@@ -51,8 +66,6 @@ function Reviews() {
             );
         }
     };
-
-    const [message, setMessage] = useState("");
 
     useEffect(() => {
         const fetchHikes = async () => {
@@ -67,16 +80,7 @@ function Reviews() {
         fetchHikes();
     }, []);
 
-    const [reviews, setReviews] = useState([]);
 
-    const fetchReviews = async (hikeId) => {
-        try {
-            const response = await getReviewsByHike(hikeId);
-            setReviews(response.data);
-        } catch (error) {
-            console.error("Erreur avis :", error);
-        }
-    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -86,9 +90,6 @@ function Reviews() {
             [name]: value
         });
 
-        if (name === "hike_id" && value) {
-            fetchReviews(value);
-        }
     };
 
     const handleSubmit = async (e) => {
@@ -96,14 +97,12 @@ function Reviews() {
 
         try {
             await createReview(formData);
-            await fetchReviews(formData.hike_id);
-
-            setMessage("Avis ajouté avec succès");
+            await fetchAllReviews();
 
             setFormData({
                 commentary: "",
                 rating: 5,
-                hike_title: ""
+                hike_id: ""
             });
         } catch (error) {
             console.error(error.response?.data || error);
@@ -111,14 +110,31 @@ function Reviews() {
         }
     };
 
+    const handleDeleteReview = async (reviewId) => {
+        const confirmDelete = window.confirm(
+            "Voulez-vous supprimer cet avis ?"
+        );
+
+        if (!confirmDelete) return;
+
+        try {
+            await deleteReview(reviewId);
+
+            await fetchAllReviews();
+        } catch (error) {
+            console.error(
+                "Erreur suppression avis :",
+                error.response?.data || error
+            );
+        }
+    };
+
     return (
         <div className="Page">
-      <Header />
-            <h2>Laissez un avis</h2>
+            <Header />
+            {user && (<h2>Laissez un avis</h2>)}
 
-            {message && <p>{message}</p>}
-
-            <form onSubmit={handleSubmit} className="review-form">
+            {user && (<form onSubmit={handleSubmit} className="review-form">
                 <div>
                     <label>Randonnée</label>
                     <select
@@ -166,28 +182,57 @@ function Reviews() {
 
                 <button type="submit">Publier l'avis</button>
             </form>
+            )}
 
-            <section>
-                <h2>Avis des clients</h2>
+            <section className="review">
+                <h2>Avis des randonneurs</h2>
 
-                {reviews.length === 0 ? (
-                    <p>Aucun avis pour cette randonnée.</p>
+              <section className="reviews-container">  {reviews.length === 0 ? (
+                    <p>Aucun avis pour le moment.</p>
                 ) : (
                     reviews.map((review) => (
-                        <article key={review.review_id}>
-                            <p>Note : {review.rating}/5</p>
-                            <p>{review.commentary}</p>
-                            <p>Date : {new Date(review.created_at).toLocaleDateString("fr-FR")}</p>
+                        <article key={review.review_id} className="review-card">
+                            <h3>
+                                {review.first_name} {review.last_name}
+                            </h3>
 
-                            <button onClick={() => handleEditReview(review)}>
-                                Modifier
-                            </button>
+                            <p>
+                                <strong>Randonnée :</strong> {review.hike_title}
+                            </p>
+
+                            <p>
+                                <strong>Note :</strong> {review.rating}/5
+                            </p>
+
+                            <p>{review.commentary}</p>
+
+                            <p>
+                                {new Date(review.created_at).toLocaleDateString("fr-FR")}
+                            </p>
+
+                            {user && Number(user.user_id) === Number(review.user_id) && (
+                                <>
+                                    <button className="button-edit" onClick={() => handleEditReview(review)}>
+                                        Modifier
+                                    </button>
+
+                                    <button className="button-edit"
+                                        onClick={() => handleDeleteReview(review.review_id)}
+                                    >
+                                        Supprimer
+                                    </button>
+                                </>
+                            )}
+
+
+
                         </article>
                     ))
                 )}
             </section>
+            </section>
             {editingReview && (
-                <form onSubmit={handleUpdateReview}>
+                <form onSubmit={handleUpdateReview} className="review-form">
                     <h3>Modifier mon avis</h3>
 
                     <select
@@ -206,6 +251,9 @@ function Reviews() {
                         name="commentary"
                         value={editForm.commentary}
                         onChange={handleEditChange}
+                        style={{ resize: 'none' }}
+                        rows="4"
+
                     />
 
                     <button type="submit">Enregistrer</button>

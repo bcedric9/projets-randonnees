@@ -1,15 +1,12 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { createPayment, getBookingDetails } from "../services/api";
+import { getBookingDetails, createStripeCheckout } from "../services/api";
 
 function Payment() {
   const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-
   const bookingId = searchParams.get("booking_id");
 
   const [totalPrice, setTotalPrice] = useState(0);
-
   const [paymentData, setPaymentData] = useState({
     payment_method: "card"
   });
@@ -44,39 +41,50 @@ function Payment() {
     e.preventDefault();
 
     try {
-      await createPayment({
+      const response = await createStripeCheckout({
         amount: totalPrice,
-        payment_method: paymentData.payment_method,
         booking_id: bookingId
       });
 
-      navigate("/profile");
+      console.log("Réponse Stripe :", response.data);
+
+      window.location.href = response.data.url;
     } catch (error) {
-      console.error("Erreur paiement :", error.response?.data || error);
+      console.error(
+        "Erreur Stripe frontend :",
+        error.response?.data || error
+      );
     }
   };
 
   return (
-    <main>
-      <h1>Paiement</h1>
+    <main className="payment-container">
+      <h2>Paiement</h2>
 
-      <p>Montant à payer : {totalPrice} €</p>
+      <div className="payment-card">
+        <form onSubmit={handleSubmit} className="payment-form">
+          <div className="form-group">
+            <p>Montant à payer : {totalPrice} €</p>
+          </div>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Méthode de paiement</label>
-          <select
-            name="payment_method"
-            value={paymentData.payment_method}
-            onChange={handleChange}
-          >
-            <option value="card">Carte bancaire</option>
-            <option value="paypal">PayPal</option>
-          </select>
-        </div>
+          <div className="form-group">
+            <label>Méthode de paiement : </label>
+            
+            <select
+              name="payment_method"
+              value={paymentData.payment_method}
+              onChange={handleChange}
+            >
+              <option value="card">Carte bancaire</option>
+              <option value="paypal">Paypal</option>
+            </select>
+          </div>
 
-        <button type="submit">Payer</button>
-      </form>
+          <button type="submit">
+            Payer
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
