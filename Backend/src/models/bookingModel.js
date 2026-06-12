@@ -77,3 +77,19 @@ export async function updateBookingStatus(id, status) {
 
   return result;
 }
+
+export async function getExistingBooking(booking_date, guide_id, hike_id) {
+  const [result] = await connection.execute(
+    `SELECT booking_id
+     FROM booking
+     WHERE DATE(booking_date) = DATE(?)
+     AND status != 'cancelled'
+     AND (
+       guide_id = ?
+       OR hike_id = ?
+     )`,
+    [booking_date, guide_id, hike_id]
+  );
+
+  return result[0];
+}

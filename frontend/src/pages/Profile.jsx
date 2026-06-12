@@ -15,6 +15,36 @@ function Profile() {
   });
 
   const [reviews, setReviews] = useState([]);
+  const [editingReview, setEditingReview] = useState(null);
+  const [editForm, setEditForm] = useState({
+    commentary: "",
+    rating: 5
+  });
+
+  const handleEditReview = (review) => {
+    setEditingReview(review);
+
+    setEditForm({
+      commentary: review.commentary,
+      rating: review.rating
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditForm({
+      ...editForm,
+      [e.target.name]: e.target.value
+    });
+  };
+
+    const fetchReviews = async () => {
+      try {
+        const response = await getReviewsByUser(user.user_id);
+        setReviews(response.data);
+      } catch (error) {
+        console.error("Erreur avis :", error);
+      }
+    };
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -26,20 +56,47 @@ function Profile() {
       }
     };
 
-    const fetchReviews = async () => {
-      try {
-        const response = await getReviewsByUser(user.user_id);
-        setReviews(response.data);
-      } catch (error) {
-        console.error("Erreur avis :", error);
-      }
-    };
-
     if (user?.user_id) {
       fetchBookings();
       fetchReviews();
     }
   }, [user?.user_id]);
+
+  const handleUpdateReview = async (e) => {
+    e.preventDefault();
+
+    try {
+      await updateReview(editingReview.review_id, editForm);
+
+      await fetchReviews();
+
+      setEditingReview(null);
+    } catch (error) {
+      console.error(
+        "Erreur modification avis :",
+        error.response?.data || error
+      );
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    const confirmDelete = window.confirm(
+      "Voulez-vous supprimer cet avis ?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await deleteReview(reviewId);
+
+      await fetchReviews();
+    } catch (error) {
+      console.error(
+        "Erreur suppression avis :",
+        error.response?.data || error
+      );
+    }
+  };
 
   const handleEdit = (booking) => {
     setEditingBooking(booking);
@@ -109,28 +166,41 @@ function Profile() {
 
       <section>
         <h2>Mes réservations</h2>
-<div className="profil-container">
-        {bookings.length === 0 ? (
-          <p>Aucune réservation pour le moment.</p>
-        ) : (
-          bookings.map((booking) => (
-            <article key={booking.booking_id} className="profil-card">
-              <p>Date : {new Date(booking.booking_date).toLocaleDateString("fr-FR")}</p>
-              <p>Participants : {booking.number_participants}</p>
-              <p>Statut : {booking.status}</p>
-              <p>Randonnée : {booking.hike_title}</p>
-              <p>Guide : {booking.guide_name}</p>
+        <div className="profil-container">
+          {bookings.length === 0 ? (
+            <p>Aucune réservation pour le moment.</p>
+          ) : (
+            bookings.map((booking) => (
+              <article key={booking.booking_id} className="profil-card">
+                <p>Date : {new Date(booking.booking_date).toLocaleDateString("fr-FR")}</p>
+                <p>Participants : {booking.number_participants}</p>
+                <p>
+                  <strong>Statut :</strong>{" "}
+                  {
+                    {
+                      pending: "En attente",
+                      confirmed: "Confirmée",
+                      cancelled: "Annulée"
+                    }[booking.status]
+                  }
+                </p>
+                <p>Randonnée : {booking.hike_title}</p>
+                <p>Guide : {booking.guide_name}</p>
 
-              <button onClick={() => handleEdit(booking)}>
-                Modifier
-              </button>
+                {booking.status !== "confirmed" && (
+                  <button onClick={() => handleEdit(booking)}>
+                    Modifier
+                  </button>
+                )}
 
-              <button onClick={() => handleDelete(booking.booking_id)}>
-                Annuler la réservation
-              </button>
-            </article>
-          ))
-        )}
+                {booking.status !== "confirmed" && booking.status !== "cancelled" && (
+                  <button onClick={() => handleDelete(booking.booking_id)}>
+                    Annuler
+                  </button>
+                )}
+              </article>
+            ))
+          )}
         </div>
       </section>
 
@@ -175,27 +245,74 @@ function Profile() {
               Annuler
             </button>
           </form>
-          
+
         </section>
       )}
 
       <section>
         <h2>Mes avis</h2>
-<div className="profil-container">
-        {reviews.length === 0 ? (
-          <p>Vous n'avez pas encore laissé d'avis.</p>
-        ) : (
-          reviews.map((review) => (
-            <article key={review.review_id} className="profil-card">
-              <p>Note : {review.rating}/5</p>
-              <p>Commentaire : {review.commentary}</p>
-              <p>Date : {new Date(review.created_at).toLocaleDateString("fr-FR")}</p>
-              <p>Randonnée : {review.hike_title}</p>
-            </article>
-          ))
-        )}
+        <div className="profil-container">
+          {reviews.length === 0 ? (
+            <p>Vous n'avez pas encore laissé d'avis.</p>
+          ) : (
+            reviews.map((review) => (
+              <article key={review.review_id} className="profil-card">
+                <p>Note : {review.rating}/5</p>
+                <p>{review.commentary}</p>
+                <p>Date : {new Date(review.created_at).toLocaleDateString("fr-FR")}</p>
+                <p>Randonnée : {review.hike_title}</p>
+
+                {user && Number(user.user_id) === Number(review.user_id) && (
+                  <>
+                    <button className="button-edit" onClick={() => handleEditReview(review)}>
+                      Modifier
+                    </button>
+
+                    <button className="button-edit"
+                      onClick={() => handleDeleteReview(review.review_id)}
+                    >
+                      Supprimer
+                    </button>
+                  </>
+                )}
+              </article>
+            ))
+          )}
         </div>
       </section>
+
+      {editingReview && (
+        <form onSubmit={handleUpdateReview} className="review-form">
+          <h3>Modifier mon avis</h3>
+
+          <select
+            name="rating"
+            value={editForm.rating}
+            onChange={handleEditChange}
+          >
+            <option value="1">1 étoile</option>
+            <option value="2">2 étoiles</option>
+            <option value="3">3 étoiles</option>
+            <option value="4">4 étoiles</option>
+            <option value="5">5 étoiles</option>
+          </select>
+
+          <textarea
+            name="commentary"
+            value={editForm.commentary}
+            onChange={handleEditChange}
+            style={{ resize: 'none' }}
+            rows="4"
+
+          />
+
+          <button type="submit">Enregistrer</button>
+
+          <button type="button" onClick={() => setEditingReview(null)}>
+            Annuler
+          </button>
+        </form>
+      )}
     </main>
   );
 }

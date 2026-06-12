@@ -1,5 +1,6 @@
-import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails, cancelBooking, updateBookingStatus } from "../models/bookingModel.js";
+import { createBooking, getAllBookings, getBookingByDate, getBookingById, getBookingsByGuide, getBookingsByUser, updateBooking, deleteBooking, getBookingDetails, cancelBooking, updateBookingStatus, getExistingBooking } from "../models/bookingModel.js";
 import { deletePaymentsByBooking } from "../models/paymentModel.js";
+
 
 export async function createBookingController(req, res) {
     try {
@@ -7,6 +8,18 @@ export async function createBookingController(req, res) {
 
         if (!booking_date || !number_participants || !guide_id || !hike_id) {
             return res.status(400).json({ message: "Tous les champs sont requis" });
+        }
+
+        const existingBooking = await getExistingBooking(
+            booking_date,
+            guide_id,
+            hike_id
+        );
+
+        if (existingBooking) {
+            return res.status(400).json({
+                message: "Ce guide ou cette randonnée est déjà réservé à cette date"
+            });
         }
 
         const user_id = req.user.user_id;
@@ -130,6 +143,12 @@ export async function UpBooking(req, res) {
             });
         }
 
+        if (booking.status === "confirmed" && req.user.role !== "admin") {
+            return res.status(403).json({
+                message: "Une réservation confirmée ne peut plus être modifiée"
+            });
+        }
+
         const updatedStatus =
             req.user.role === "admin" && status !== undefined
                 ? status
@@ -199,54 +218,54 @@ export async function bookingsByDate(req, res) {
 };
 
 export async function cancelBookingController(req, res) {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const booking = await getBookingById(id);
+        const booking = await getBookingById(id);
 
-    if (!booking) {
-      return res.status(404).json({
-        message: "Réservation non trouvée"
-      });
+        if (!booking) {
+            return res.status(404).json({
+                message: "Réservation non trouvée"
+            });
+        }
+
+        if (
+            req.user.user_id !== booking.user_id &&
+            req.user.role !== "admin"
+        ) {
+            return res.status(403).json({
+                message: "Accès refusé"
+            });
+        }
+
+        await cancelBooking(id);
+
+        res.status(200).json({
+            message: "Réservation annulée avec succès"
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur lors de l'annulation",
+            error: error.message
+        });
     }
-
-    if (
-      req.user.user_id !== booking.user_id &&
-      req.user.role !== "admin"
-    ) {
-      return res.status(403).json({
-        message: "Accès refusé"
-      });
-    }
-
-    await cancelBooking(id);
-
-    res.status(200).json({
-      message: "Réservation annulée avec succès"
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur lors de l'annulation",
-      error: error.message
-    });
-  }
 };
 
 export async function updateBookingStatusController(req, res) {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
 
-    await updateBookingStatus(id, status);
+        await updateBookingStatus(id, status);
 
-    res.status(200).json({
-      message: "Statut mis à jour"
-    });
-  } catch (error) {
-    res.status(500).json({
-      message: "Erreur statut",
-      error: error.message
-    });
-  }
+        res.status(200).json({
+            message: "Statut mis à jour"
+        });
+    } catch (error) {
+        res.status(500).json({
+            message: "Erreur statut",
+            error: error.message
+        });
+    }
 }

@@ -1,5 +1,5 @@
-import {useEffect, useState} from 'react';
-import {getAllHikes} from '../services/api';
+import { useEffect, useState } from 'react';
+import { getAllHikes } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import HikeCard from '../components/HikeCard';
@@ -7,25 +7,30 @@ import '/style/global.css';
 import Footer from '../components/Footer';
 
 function Hikes() {
-    useEffect(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
   const [hikes, setHikes] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user?.role === "admin";
+  
+
+  const fetchHikes = async () => {
+    try {
+      const response = await getAllHikes();
+      setHikes(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
-    const fetchHikes = async () => {
-      try {
-        const response = await getAllHikes();
-        setHikes(response.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     fetchHikes();
   }, []);
+
+
 
   const handleBooking = (hikeId) => {
     navigate(`/booking?hike_id=${hikeId}`);
@@ -33,11 +38,11 @@ function Hikes() {
 
   return (
     <div className="Page">
-      <Header/>
+      <Header />
       <h2>Nos randonnées</h2>
 
-      <p className='presentation'>La randonnée en montagne permet de se ressourcer en pleine nature tout en améliorant sa condition physique. 
-        Elle réduit le stress, favorise le bien-être mental et offre un véritable moment de déconnexion. 
+      <p className='presentation'>La randonnée en montagne permet de se ressourcer en pleine nature tout en améliorant sa condition physique.
+        Elle réduit le stress, favorise le bien-être mental et offre un véritable moment de déconnexion.
         C'est aussi une excellente façon de se reconnecter à soi et à l'environnement.</p>
 
       <div className="cards-container">
@@ -45,6 +50,8 @@ function Hikes() {
           <HikeCard
             key={hike.hike_id}
             hike={hike}
+            isAdmin={isAdmin}
+            onDeleted={fetchHikes}
           />
         ))}
       </div>

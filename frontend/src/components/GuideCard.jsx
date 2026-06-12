@@ -1,8 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import { deleteGuide } from "../services/api";
 
 
-function GuideCard({ guide }) {
+function GuideCard({ guide, isAdmin, onDeleted }) {
     const navigate = useNavigate();
+
+    const handleDelete = async () => {
+        if (!window.confirm("Supprimer ce guide ?")) return;
+
+        await deleteGuide(guide.guide_id);
+        onDeleted();
+    };
 
     return (
         <article className="GuideCard">
@@ -12,7 +20,7 @@ function GuideCard({ guide }) {
             />
             <div className="guide-content">
                 <h3>
-                {guide.first_name} {guide.last_name}
+                    {guide.first_name} {guide.last_name}
                 </h3>
 
                 <p>{guide.bio}</p>
@@ -25,6 +33,12 @@ function GuideCard({ guide }) {
                 >
                     Choisir ce guide
                 </button>
+
+                {isAdmin && (
+                    <button className="delete-btn" onClick={handleDelete}>
+                        Supprimer
+                    </button>
+                )}
             </div>
         </article>
     )

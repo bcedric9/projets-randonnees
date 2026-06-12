@@ -24,6 +24,8 @@ function Booking() {
         number_participants: 1
     });
 
+    const [message, setMessage] = useState("");
+
     useEffect(() => {
         const fetchHikes = async () => {
             try {
@@ -90,16 +92,25 @@ function Booking() {
             const bookingId = response.data.bookingId;
 
             navigate(`/payment?booking_id=${bookingId}`);
-        } catch (error) {
-            console.error("Erreur réservation :", error.response?.data || error);
-        }
-    };
+         } catch (error) {
+        setMessage(
+            error.response?.data?.message ||
+            error.response?.data?.error
+        );
+    }
+};
 
     return (
         <main>
             <section className="reservation-header">
                 <h2>Réservation</h2>
             </section>
+
+            {message && (
+                <p className="message-review">
+                    {message}
+                </p>
+            )}
 
             <form onSubmit={handleSubmit} className="reservation-form">
 

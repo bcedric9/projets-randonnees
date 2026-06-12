@@ -7,13 +7,14 @@ import GuideCard from "../components/GuideCard";
 function Guides() {
 
   useEffect(() => {
-  window.scrollTo(0,0);
-}, []);
+    window.scrollTo(0, 0);
+  }, []);
 
   const [guides, setGuides] = useState([]);
   const [error, setError] = useState("");
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = user?.role === "admin";
 
-  useEffect(() => {
     const fetchGuides = async () => {
       try {
         const response = await getAllGuides();
@@ -24,16 +25,18 @@ function Guides() {
       }
     };
 
+     useEffect(() => {
     fetchGuides();
   }, []);
+
 
   return (
     <div className="Page">
       <Header />
       <h2>Nos guides</h2>
 
-      <p className='presentation'>Découvrez notre équipe de guides professionnels. Chacun possède sa propre expertise, 
-        des balades familiales aux treks les plus sportifs, pour vous faire vivre une expérience 
+      <p className='presentation'>Découvrez notre équipe de guides professionnels. Chacun possède sa propre expertise,
+        des balades familiales aux treks les plus sportifs, pour vous faire vivre une expérience
         unique au cœur de la montagne.</p>
 
       {guides.length === 0 ? (
@@ -44,6 +47,8 @@ function Guides() {
             <GuideCard
               key={guide.guide_id}
               guide={guide}
+              isAdmin={isAdmin}
+              onDeleted={fetchGuides}
             />
           ))}
         </div>

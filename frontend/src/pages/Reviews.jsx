@@ -13,6 +13,7 @@ function Reviews() {
         rating: 5,
         hike_id: ""
     });
+    const [message, setMessage] = useState("");
 
     const fetchAllReviews = async () => {
         try {
@@ -99,14 +100,16 @@ function Reviews() {
             await createReview(formData);
             await fetchAllReviews();
 
+            setMessage("Avis ajouté avec succès");
+
             setFormData({
                 commentary: "",
                 rating: 5,
                 hike_id: ""
             });
         } catch (error) {
-            console.error(error.response?.data || error);
-            setMessage("Erreur lors de l'ajout de l'avis");
+            setMessage(
+                error.response?.data?.error);
         }
     };
 
@@ -133,6 +136,12 @@ function Reviews() {
         <div className="Page">
             <Header />
             {user && (<h2>Laissez un avis</h2>)}
+
+            {message && (
+                <p className="message-review">
+                    {message}
+                </p>
+            )}
 
             {user && (<form onSubmit={handleSubmit} className="review-form">
                 <div>
@@ -187,7 +196,7 @@ function Reviews() {
             <section className="review">
                 <h2>Avis des randonneurs</h2>
 
-              <section className="reviews-container">  {reviews.length === 0 ? (
+                <section className="reviews-container">  {reviews.length === 0 ? (
                     <p>Aucun avis pour le moment.</p>
                 ) : (
                     reviews.map((review) => (
@@ -229,7 +238,7 @@ function Reviews() {
                         </article>
                     ))
                 )}
-            </section>
+                </section>
             </section>
             {editingReview && (
                 <form onSubmit={handleUpdateReview} className="review-form">

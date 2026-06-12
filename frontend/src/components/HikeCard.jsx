@@ -1,7 +1,15 @@
 import { useNavigate } from "react-router-dom";
+import { deleteHike } from "../services/api";
 
-function HikeCard({ hike }) {
+function HikeCard({ hike, isAdmin, onDeleted }) {
     const navigate = useNavigate();
+
+    const handleDelete = async () => {
+        if (!window.confirm("Supprimer cette randonnée ?")) return;
+
+        await deleteHike(hike.hike_id);
+        onDeleted();
+    };
 
     return (
         <article className="hike-card">
@@ -46,6 +54,12 @@ function HikeCard({ hike }) {
                 >
                     Réserver
                 </button>
+
+                {isAdmin && (
+                    <button className="delete-btn" onClick={handleDelete}>
+                        Supprimer
+                    </button>
+                )}
             </div>
         </article>
     );
